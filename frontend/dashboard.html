@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard · Mini CRM</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="auth-logo">CRM<span>·</span></div>
+    <nav>
+      <a href="#" class="nav-link active" data-view="dashboardView">Dashboard</a>
+      <a href="#" class="nav-link" data-view="leadsView">Leads</a>
+    </nav>
+    <div class="sidebar-footer">
+      <span id="whoami">—</span>
+      <button id="logoutBtn" class="btn-ghost">Log out</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboardView" class="view">
+      <h1>Dashboard</h1>
+      <div class="stat-grid" id="statGrid">
+        <!-- filled by JS -->
+      </div>
+
+      <h2 class="section-title">Recent leads</h2>
+      <table class="data-table" id="recentTable">
+        <thead><tr><th>Name</th><th>Company</th><th>Status</th><th>Added</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- LEADS VIEW -->
+    <section id="leadsView" class="view" style="display:none;">
+      <div class="view-header">
+        <h1>Leads</h1>
+        <button id="addLeadBtn" class="btn-primary">+ Add lead</button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search by name, email, company, phone..." />
+        <select id="statusFilter">
+          <option value="">All statuses</option>
+          <option>New</option>
+          <option>Contacted</option>
+          <option>Qualified</option>
+          <option>Proposal</option>
+          <option>Won</option>
+          <option>Lost</option>
+        </select>
+      </div>
+
+      <table class="data-table" id="leadsTable">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Source</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<!-- Add / Edit Lead Modal -->
+<div class="modal-overlay" id="leadModalOverlay">
+  <div class="modal">
+    <h2 id="leadModalTitle">Add lead</h2>
+    <form id="leadForm">
+      <input type="hidden" id="leadId" />
+      <label>Name *</label>
+      <input type="text" id="fName" required />
+      <label>Company</label>
+      <input type="text" id="fCompany" />
+      <label>Website (used to auto-fetch a logo)</label>
+      <input type="text" id="fWebsite" placeholder="example.com" />
+      <label>Email</label>
+      <input type="email" id="fEmail" />
+      <label>Phone</label>
+      <input type="text" id="fPhone" />
+      <label>Source</label>
+      <select id="fSource">
+        <option>Website</option>
+        <option>Referral</option>
+        <option>Cold Call</option>
+        <option>Social Media</option>
+        <option>Other</option>
+      </select>
+      <label>Status</label>
+      <select id="fStatus">
+        <option>New</option><option>Contacted</option><option>Qualified</option>
+        <option>Proposal</option><option>Won</option><option>Lost</option>
+      </select>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="cancelLeadBtn">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Lead Detail / Notes Modal -->
+<div class="modal-overlay" id="detailModalOverlay">
+  <div class="modal modal-wide">
+    <div class="detail-header">
+      <img id="detailLogo" class="detail-logo" style="display:none;" />
+      <div>
+        <h2 id="detailName"></h2>
+        <p id="detailCompany" class="muted"></p>
+      </div>
+      <button class="btn-ghost" id="closeDetailBtn" style="margin-left:auto;">Close</button>
+    </div>
+
+    <div class="detail-grid">
+      <div><strong>Email:</strong> <span id="detailEmail"></span></div>
+      <div><strong>Phone:</strong> <span id="detailPhone"></span></div>
+      <div><strong>Source:</strong> <span id="detailSource"></span></div>
+      <div>
+        <strong>Status:</strong>
+        <select id="detailStatus">
+          <option>New</option><option>Contacted</option><option>Qualified</option>
+          <option>Proposal</option><option>Won</option><option>Lost</option>
+        </select>
+      </div>
+    </div>
+
+    <h3>Notes</h3>
+    <div id="notesList" class="notes-list"></div>
+    <form id="noteForm" class="note-form">
+      <input type="text" id="noteText" placeholder="Add a note about this lead..." required />
+      <button type="submit" class="btn-primary">Add</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

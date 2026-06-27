@@ -1,0 +1,5 @@
+.env
+create_tables.py
+__pycache__/
+*.pyc
+test.png

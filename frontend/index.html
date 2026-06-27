@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login · Mini CRM</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-body">
+
+  <div class="auth-card">
+    <div class="auth-logo">CRM<span>·</span></div>
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Sign in to manage your leads</p>
+
+    <form id="loginForm">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="e.g. admin" required />
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" required />
+
+      <div id="errorBox" class="error-box" style="display:none;"></div>
+
+      <button type="submit" class="btn-primary full">Sign in</button>
+    </form>
+
+    <p class="auth-footer">
+      First time here? <a href="#" id="showRegister">Create the first account</a>
+    </p>
+
+    <form id="registerForm" style="display:none;">
+      <label>Choose a username</label>
+      <input type="text" id="regUsername" required />
+      <label>Choose a password</label>
+      <input type="password" id="regPassword" required />
+      <div id="regMsg" class="error-box" style="display:none;"></div>
+      <button type="submit" class="btn-primary full">Create account</button>
+      <p class="auth-footer"><a href="#" id="showLogin">Back to sign in</a></p>
+    </form>
+  </div>
+
+<script src="js/config.js"></script>
+<script>
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const errorBox = document.getElementById('errorBox');
+const regMsg = document.getElementById('regMsg');
+
+document.getElementById('showRegister').onclick = (e) => {
+  e.preventDefault();
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'block';
+};
+document.getElementById('showLogin').onclick = (e) => {
+  e.preventDefault();
+  registerForm.style.display = 'none';
+  loginForm.style.display = 'block';
+};
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorBox.style.display = 'none';
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  try {
+    const res = await fetch(`${API_BASE}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    window.location.href = 'dashboard.html';
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.style.display = 'block';
+  }
+});
+
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  regMsg.style.display = 'none';
+  const username = document.getElementById('regUsername').value;
+  const password = document.getElementById('regPassword').value;
+  try {
+    const res = await fetch(`${API_BASE}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    regMsg.style.color = 'var(--success)';
+    regMsg.textContent = 'Account created! You can sign in now.';
+    regMsg.style.display = 'block';
+  } catch (err) {
+    regMsg.style.color = 'var(--danger)';
+    regMsg.textContent = err.message;
+    regMsg.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
